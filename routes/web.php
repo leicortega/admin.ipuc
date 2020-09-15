@@ -17,13 +17,16 @@ Auth::routes(['register' => false]);
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/cultos', 'CultoController@index')->name('cultos');
+Route::get('/cultos/programados', 'CultoController@programados')->name('cultos-programados');
+Route::get('/cultos/realizados', 'CultoController@realizados')->name('cultos-realizados');
+
 Route::post('/cultos/create', 'CultoController@create');
 Route::post('/cultos/agregar_asistencia', 'CultoController@agregar_asistencia');
 Route::get('/cultos/cargar_asistencia', 'CultoController@cargar_asistencia');
 Route::get('/cultos/cargar_asistentes', 'CultoController@cargar_asistentes');
 Route::post('/cultos/eliminar_asistencia', 'CultoController@eliminar_asistencia');
 Route::post('/cultos/confirmar_asistencia', 'CultoController@confirmar_asistencia');
+Route::post('/cultos/confirmar_realizado', 'CultoController@confirmar_realizado');
 
 Route::get('/hermanos', 'HermanoController@index')->name('hermanos');
 Route::post('/hermanos/create', 'HermanoController@create');

@@ -9,15 +9,15 @@ function agregar_asistencia(id, pico_cedula) {
 
     $('#culto_id').val(id)
 
-    cargar_hermanos_culto(pico_cedula)
+    cargar_hermanos_culto(id, pico_cedula)
     cargar_asistentes(id)
 }
 
-function cargar_hermanos_culto(pico_cedula) {
+function cargar_hermanos_culto(id, pico_cedula) {
     $.ajax({
         url: '/cultos/cargar_asistencia',
         type: 'GET',
-        data: {pico_cedula:pico_cedula},
+        data: {id:id, pico_cedula:pico_cedula},
         success: function (data) {
             content = '';
             data.forEach(hermano => {
@@ -92,6 +92,11 @@ function confirmar_asistencia_modal(id, culto_id, nombre) {
     $('#culto_id_asistencia').val(culto_id)
 
     $('#confirmar_asistencia_modal').modal('show');
+}
+
+function confirmar_realizado(id) {
+    $('#confirmar-realizado-modal').modal('show')
+    $('#culto_id_realizado').val(id)
 }
 
 $('#confirmar_asistencia').submit(function () {

@@ -15,8 +15,14 @@ class CultoController extends Controller
         $this->middleware('auth');
     }
 
-    public function index() {
-        $cultos = Culto::all();
+    public function programados() {
+        $cultos = Culto::whereNull('ofrenda')->orderBy('fecha', 'desc')->get();
+
+        return view('cultos.index', ['cultos' => $cultos]);
+    }
+
+    public function realizados() {
+        $cultos = Culto::whereNotNull('ofrenda')->orderBy('fecha', 'desc')->get();
 
         return view('cultos.index', ['cultos' => $cultos]);
     }
@@ -34,13 +40,18 @@ class CultoController extends Controller
         ]);
 
         if ($culto->save()) {
-            return redirect()->route('cultos')->with(['creado' => 1]);
+            return redirect()->route('cultos-programados')->with(['creado' => 1]);
         }
 
-        return redirect()->route('cultos')->with(['creado' => 0]);
+        return redirect()->route('cultos-programados')->with(['creado' => 0]);
     }
 
     public function cargar_asistencia(Request $request) {
+
+        dd(
+            DB::select('SELECT * FROM hermanos, asistencia WHERE MOD(hermanos.identificacion, 2) = 1 AND (hermanos.id <> asistencia.hermano_id AND asistencia.culto_id = '.$request["id"].')')
+        );
+
         if ($request['pico_cedula'] == 'Par') {
             return DB::select('SELECT * FROM `hermanos` WHERE MOD(`identificacion`, 2) = 0');
         } else {
@@ -73,5 +84,15 @@ class CultoController extends Controller
             ]);
         
         return $request['culto_id_asistencia'];
+    }
+
+    public function confirmar_realizado(Request $request) {
+        $culto = Culto::find($request['culto_id_realizado']);
+
+        $culto->update([
+            'ofrenda' => $request['ofrenda']
+        ]);
+
+        return redirect()->route('cultos-realizados')->with(['realizado' => 1]);
     }
 }

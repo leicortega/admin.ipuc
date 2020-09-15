@@ -21,6 +21,10 @@
         </div>
     </div>
 
+    @if (session()->has('realizado') && session('realizado') == 1)
+        <div class="rounded-md flex items-center px-5 py-4 mb-2 bg-theme-18 text-theme-9 col-span-12"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle w-6 h-6 mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Culto realizado correctamente </div>
+    @endif
+
     @if (session()->has('creado') && session('creado') == 1)
         <div class="rounded-md flex items-center px-5 py-4 mb-2 bg-theme-18 text-theme-9 col-span-12"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle w-6 h-6 mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Culto programado correctamente </div>
     @endif
@@ -58,7 +62,9 @@
                         <td class="text-center">{{ $item->pico_cedula }}</td>
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                                <a class="flex items-center mr-3" href="javascript:;" onclick="agregar_asistencia({{ $item->id }}, '{{ $item->pico_cedula }}')"> <i data-feather="check-square" class="w-4 h-4 mr-1"></i></a>
+                                <a class="flex items-center mr-3" href="javascript:;" onclick="confirmar_realizado({{ $item->id }})"> <i data-feather="check-square" class="w-4 h-4 mr-1"></i></a>
+
+                                <a class="flex items-center mr-3" href="javascript:;" onclick="agregar_asistencia({{ $item->id }}, '{{ $item->pico_cedula }}')"> <i data-feather="file-text" class="w-4 h-4 mr-1"></i></a>
 
                                 <a class="flex items-center text-theme-6" href="javascript:;" data-toggle="modal" data-target="#delete-confirmation-modal"> <i data-feather="trash-2" class="w-4 h-4 mr-1"></i></a>
                             </div>
@@ -256,6 +262,32 @@
             </form>
         </div>
     </div>
+
+    <!-- BEGIN: Confirmar culto realizado Modal -->
+    <div class="modal" id="confirmar-realizado-modal">
+        <div class="modal__content modal__content--lg p-10">
+            <form action="/cultos/confirmar_realizado" id="confirmar_realizado" method="post">
+                @csrf
+
+                <div class=" items-center px-5 py-5 sm:py-3 border-b border-gray-200">
+                    <h2 class="font-medium text-base mr-auto">
+                        Confirmar Culto Realizado
+                    </h2>
+                </div>
+                <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
+                    <div class="col-span-12 sm:col-span-10">
+                        <label>Digite la ofrenda</label>
+                        <input type="number" name="ofrenda" id="ofrenda" class="input w-full border mt-2 flex-1" required> 
+                    </div>
+                    <input type="hidden" id="culto_id_realizado" name="culto_id_realizado">
+                    <div class="col-span-12 sm:col-span-2 mt-8">
+                        <button type="submit" class="button w-20 bg-theme-1 text-white">Enviar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- END: Confirmar culto realizado Modal -->
 
 @endsection
 
