@@ -48,14 +48,14 @@ class CultoController extends Controller
 
     public function cargar_asistencia(Request $request) {
 
-        dd(
-            DB::select('SELECT * FROM hermanos, asistencia WHERE MOD(hermanos.identificacion, 2) = 1 AND (hermanos.id <> asistencia.hermano_id AND asistencia.culto_id = '.$request["id"].')')
-        );
-
         if ($request['pico_cedula'] == 'Par') {
-            return DB::select('SELECT * FROM `hermanos` WHERE MOD(`identificacion`, 2) = 0');
+            return DB::select(
+                'SELECT * FROM hermanos WHERE MOD(`identificacion`, 2) = 0 AND ((SELECT COUNT(*) from asistencia) = 0 OR id <> (SELECT hermano_id FROM `asistencia` WHERE culto_id = '.$request["id"].'))'
+            );
         } else {
-            return DB::select('SELECT * FROM `hermanos` WHERE MOD(`identificacion`, 2) = 1');
+            return DB::select(
+                'SELECT * FROM hermanos WHERE MOD(`identificacion`, 2) = 1 AND ((SELECT COUNT(*) from asistencia) = 0 OR id <> (SELECT hermano_id FROM `asistencia` WHERE culto_id = '.$request["id"].'))'
+            );
         }
     }
 
@@ -64,8 +64,10 @@ class CultoController extends Controller
     }
 
     public function agregar_asistencia(Request $request) {
+        $pico_cedula = $request['pico_cedula'];
+        unset($request['pico_cedula']);
         if (Asistencia::create($request->all())->save()) {
-            return $request['culto_id'];
+            return ['id' => $request['culto_id'], 'pico_cedula' => $pico_cedula];
         }
 
         return 0;

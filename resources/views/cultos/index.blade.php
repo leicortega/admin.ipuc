@@ -191,6 +191,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="culto_id" name="culto_id">
+                    <input type="hidden" id="pico_cedula" name="pico_cedula">
                     <div class="col-span-12 sm:col-span-2 mt-8">
                         <button type="submit" class="button w-20 bg-theme-1 text-white">Enviar</button>
                     </div>

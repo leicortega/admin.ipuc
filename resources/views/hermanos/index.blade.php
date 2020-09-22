@@ -130,7 +130,7 @@
                         <select class="input w-full border mt-2 flex-1" name="tipo" required>
                             <option value="">Seleccione</option>
                             <option value="Hermano">Hermano</option>
-                            <option value="Amigo">Amigo</option>
+                            <option value="Simpatizante">Simpatizante</option>
                             <option value="Apartado">Apartado</option>
                         </select>
                     </div>

@@ -8,6 +8,7 @@ function agregar_asistencia(id, pico_cedula) {
     $('#agregar-hermanos-modal').modal('show')
 
     $('#culto_id').val(id)
+    $('#pico_cedula').val(pico_cedula)
 
     cargar_hermanos_culto(id, pico_cedula)
     cargar_asistentes(id)
@@ -19,6 +20,7 @@ function cargar_hermanos_culto(id, pico_cedula) {
         type: 'GET',
         data: {id:id, pico_cedula:pico_cedula},
         success: function (data) {
+            console.log(data)
             content = '';
             data.forEach(hermano => {
                 content += `
@@ -36,8 +38,10 @@ $('#agregar_asistencia').submit(function () {
         type: 'POST',
         data: $('#agregar_asistencia').serialize(),
         success: function (data) {
-            if (data > 0) {
-                cargar_asistentes(data)
+            console.log(data)
+            if (data.id > 0) {
+                cargar_asistentes(data.id)
+                cargar_hermanos_culto(data.id, data.pico_cedula)
             }
         }
     })
